@@ -9,24 +9,68 @@
 import UIKit
 
 class Gameplay: CCNode {
-    weak var gamePhysicsNode: CCPhysicsNode!
+    
     weak var levelNode: CCNode!
+    weak var contentNode: CCNode!
+    
+    weak var gamePhysicsNode: CCPhysicsNode!
+    weak var pullBackNode: CCPhysicsNode!
     weak var catapultArm: CCNode!
     
+    weak var mouseJointNode:CCNode!
+    var mouseJoint: CCPhysicsJoint?
     
     func didLoadFromCCB() {
         userInteractionEnabled = true
         
         // load the first of many levels
         let level = CCBReader.load("Levels/Level1")
-        // we're using levelNode to hold all our levels in one spot
+        // using levelNode to hold all our levels in one spot in the Gameplay
         levelNode.addChild(level)
+        
+        // make the physics bodies and joints visible
+        gamePhysicsNode.debugDraw = true
+        
+        // create an empty collisionMask so nothing bumps into the invisible nodes
+        pullBackNode.physicsBody.collisionMask = []
+        mouseJointNode.physicsBody.collisionMask = []
     }
     
     override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
-        launchPenguin()
+        let touchLocation = touch.locationInNode(contentNode)
+        
+        // start dragging the catapult arm back when a touch on the inside of the arm occurs
+        if CGRectContainsPoint(catapultArm.boundingBox(), touchLocation) {
+            // move the mouseJointNode to the touch position
+            mouseJointNode.position = touchLocation
+            
+            // set up a spring joint between the mouseJointNode and the catapultArm
+            mouseJoint = CCPhysicsJoint.connectedSpringJointWithBodyA(mouseJointNode.physicsBody, bodyB: catapultArm.physicsBody, anchorA: CGPointZero, anchorB: CGPoint(x:34, y: 38), restLength: 0, stiffness: 3000, damping: 150)
+        }
     }
     
+    override func touchMoved(touch: CCTouch!, withEvent event: CCTouchEvent!) {
+        // if the touch moves, update the touchLocation to be wherever the touch moved to
+        
+        let touchLocation = touch.locationInNode(contentNode)
+        mouseJointNode.position = touchLocation
+    }
+    
+    func releaseCatapult(){
+        if let joint = mouseJoint {
+            // releases the joint, allowing the catapult to "snap back"
+            joint.invalidate()
+            mouseJoint = nil
+        }
+    }
+    
+    override func touchEnded(touch: CCTouch!, withEvent event: CCTouchEvent!) {
+        releaseCatapult()
+    }
+    
+    override func touchCancelled(touch: CCTouch!, withEvent event: CCTouchEvent!) {
+        releaseCatapult()
+    }
     func launchPenguin(){
         
         // load the penguins we made earlier
@@ -52,7 +96,7 @@ class Gameplay: CCNode {
         let actionFollow = CCActionFollow(target: penguin, worldBoundary: boundingBox())
         
         // Lights! Camera! CCActionFollow!
-        runAction(actionFollow)
+        contentNode.runAction(actionFollow)
     }
     
     func retry(){
