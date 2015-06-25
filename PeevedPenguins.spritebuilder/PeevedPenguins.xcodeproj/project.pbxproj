@@ -10,6 +10,7 @@
 		21C237AB1B3AFA1700B85AD1 /* Penguin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C237AA1B3AFA1700B85AD1 /* Penguin.swift */; };
 		21C237B11B3AFA4000B85AD1 /* Seal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C237B01B3AFA4000B85AD1 /* Seal.swift */; };
 		21C237B91B3B77E400B85AD1 /* Gameplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C237B81B3B77E400B85AD1 /* Gameplay.swift */; };
+		21C3367D1B3C77BF00E54EF6 /* WaitingPenguin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C3367C1B3C77BF00E54EF6 /* WaitingPenguin.swift */; };
 		5B121030197484FA004C1E1D /* PeevedPenguinsActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12102F197484FA004C1E1D /* PeevedPenguinsActivity.m */; };
 		5B121038197487F2004C1E1D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B737893E1807617C0076A88C /* AppDelegate.m */; };
 		7A046D7919E84ED5004C4763 /* MainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A046D7519E84C36004C4763 /* MainScene.swift */; };
@@ -154,6 +155,7 @@
 		21C237AA1B3AFA1700B85AD1 /* Penguin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Penguin.swift; path = Source/Penguin.swift; sourceTree = "<group>"; };
 		21C237B01B3AFA4000B85AD1 /* Seal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Seal.swift; path = Source/Seal.swift; sourceTree = "<group>"; };
 		21C237B81B3B77E400B85AD1 /* Gameplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Gameplay.swift; path = Source/Gameplay.swift; sourceTree = "<group>"; };
+		21C3367C1B3C77BF00E54EF6 /* WaitingPenguin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WaitingPenguin.swift; path = Source/WaitingPenguin.swift; sourceTree = "<group>"; };
 		5B12100919748273004C1E1D /* libEGL.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libEGL.so; path = /usr/lib/armv7a/libEGL.so; sourceTree = SDKROOT; };
 		5B12100F197483EE004C1E1D /* ic_launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_launcher.png; sourceTree = "<group>"; };
 		5B121011197483EE004C1E1D /* ic_launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_launcher.png; sourceTree = "<group>"; };
@@ -443,6 +445,7 @@
 				7A40362019DDEF0D007B6E8F /* Platforms */,
 				7A046D7519E84C36004C4763 /* MainScene.swift */,
 				21C237B81B3B77E400B85AD1 /* Gameplay.swift */,
+				21C3367C1B3C77BF00E54EF6 /* WaitingPenguin.swift */,
 				21C237B01B3AFA4000B85AD1 /* Seal.swift */,
 				21C237AA1B3AFA1700B85AD1 /* Penguin.swift */,
 				D352B48019EC608A00829775 /* MetalShaders */,
@@ -824,6 +827,7 @@
 				B73789871807631A0076A88C /* main.m in Sources */,
 				21C237B91B3B77E400B85AD1 /* Gameplay.swift in Sources */,
 				7A046D7919E84ED5004C4763 /* MainScene.swift in Sources */,
+				21C3367D1B3C77BF00E54EF6 /* WaitingPenguin.swift in Sources */,
 				21C237AB1B3AFA1700B85AD1 /* Penguin.swift in Sources */,
 				21C237B11B3AFA4000B85AD1 /* Seal.swift in Sources */,
 				5B121038197487F2004C1E1D /* AppDelegate.m in Sources */,
