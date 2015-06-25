@@ -20,6 +20,10 @@ class Gameplay: CCNode {
     weak var mouseJointNode:CCNode!
     var mouseJoint: CCPhysicsJoint?
     
+    var currentPenguin:Penguin?
+    var penguinCatapultJoint: CCPhysicsJoint?
+    
+    
     func didLoadFromCCB() {
         userInteractionEnabled = true
         
@@ -28,8 +32,8 @@ class Gameplay: CCNode {
         // using levelNode to hold all our levels in one spot in the Gameplay
         levelNode.addChild(level)
         
-        // make the physics bodies and joints visible
-        gamePhysicsNode.debugDraw = true
+//        // make the physics bodies and joints visible
+//        gamePhysicsNode.debugDraw = true
         
         // create an empty collisionMask so nothing bumps into the invisible nodes
         pullBackNode.physicsBody.collisionMask = []
@@ -45,7 +49,26 @@ class Gameplay: CCNode {
             mouseJointNode.position = touchLocation
             
             // set up a spring joint between the mouseJointNode and the catapultArm
-            mouseJoint = CCPhysicsJoint.connectedSpringJointWithBodyA(mouseJointNode.physicsBody, bodyB: catapultArm.physicsBody, anchorA: CGPointZero, anchorB: CGPoint(x:34, y: 38), restLength: 0, stiffness: 3000, damping: 150)
+            mouseJoint = CCPhysicsJoint.connectedSpringJointWithBodyA(mouseJointNode.physicsBody, bodyB: catapultArm.physicsBody, anchorA: CGPointZero, anchorB: CGPoint(x:34, y: 138), restLength: 0, stiffness: 3000, damping: 150)
+            
+            // create a penguin to launch from the ccb file
+            currentPenguin = CCBReader.load("Penguin") as! Penguin?
+            
+            // if the optional "currentPenguin" has a value, give it to this constant "currentPenguin"
+            if let currentPenguin = currentPenguin {
+                // initially position it on the scoop, which is posiitoned at (34,138)
+                let penguinPosition = catapultArm.convertToWorldSpace(CGPoint(x: 34, y: 138))
+                // convert the penguin's position a node space where it'll be added
+                currentPenguin.position = gamePhysicsNode.convertToNodeSpace(penguinPosition)
+                // add it to the physics world
+                gamePhysicsNode.addChild(currentPenguin)
+                // don't allow the penguin to rotate, that's weird
+                currentPenguin.physicsBody.allowsRotation = false
+                // create a joint so that the penguin doesn't fall out the catapult scoop
+                penguinCatapultJoint = CCPhysicsJoint.connectedPivotJointWithBodyA(currentPenguin.physicsBody, bodyB: catapultArm.physicsBody, anchorA: currentPenguin.anchorPointInPoints)
+                
+                
+            }
         }
     }
     
@@ -57,10 +80,20 @@ class Gameplay: CCNode {
     }
     
     func releaseCatapult(){
+        // if the optional "mouseJoint" exists, give it's value to the constant "joint"
         if let joint = mouseJoint {
-            // releases the joint, allowing the catapult to "snap back"
+            // releases the joint, allowing the catapult to "snap back" and release the bird
             joint.invalidate()
             mouseJoint = nil
+            // releases the other joint
+            penguinCatapultJoint?.invalidate()
+            penguinCatapultJoint = nil
+            //after we release it, we can rotate the penguin
+            currentPenguin?.physicsBody.allowsRotation = true
+            //Lights! Camera! CCActionFollow!
+            let actionFollow = CCActionFollow(target: currentPenguin, worldBoundary: boundingBox())
+            contentNode.runAction(actionFollow)
+        
         }
     }
     
