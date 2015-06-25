@@ -142,6 +142,11 @@ class Gameplay: CCNode, CCPhysicsCollisionDelegate {
     }
     
     func sealRemoved(seal: Seal){
+
+        let explosion = CCBReader.load("SealExplosion") as! CCParticleSystem
+        explosion.autoRemoveOnFinish = true
+        explosion.position = seal.position
+        seal.parent.addChild(explosion)
         seal.removeFromParent()
     }
     
