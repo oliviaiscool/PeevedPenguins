@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Gameplay: CCNode {
+class Gameplay: CCNode, CCPhysicsCollisionDelegate {
     
     weak var levelNode: CCNode!
     weak var contentNode: CCNode!
@@ -26,14 +26,12 @@ class Gameplay: CCNode {
     
     func didLoadFromCCB() {
         userInteractionEnabled = true
+        gamePhysicsNode.collisionDelegate = self
         
         // load the first of many levels
         let level = CCBReader.load("Levels/Level1")
         // using levelNode to hold all our levels in one spot in the Gameplay
         levelNode.addChild(level)
-        
-//        // make the physics bodies and joints visible
-//        gamePhysicsNode.debugDraw = true
         
         // create an empty collisionMask so nothing bumps into the invisible nodes
         pullBackNode.physicsBody.collisionMask = []
@@ -43,7 +41,7 @@ class Gameplay: CCNode {
     override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
         let touchLocation = touch.locationInNode(contentNode)
         
-        // start dragging the catapult arm back when a touch on the inside of the arm occurs
+        // when a touch on the inside of the arm occurs start dragging the catapult arm back
         if CGRectContainsPoint(catapultArm.boundingBox(), touchLocation) {
             // move the mouseJointNode to the touch position
             mouseJointNode.position = touchLocation
@@ -104,6 +102,7 @@ class Gameplay: CCNode {
     override func touchCancelled(touch: CCTouch!, withEvent event: CCTouchEvent!) {
         releaseCatapult()
     }
+    
     func launchPenguin(){
         
         // load the penguins we made earlier
@@ -130,6 +129,20 @@ class Gameplay: CCNode {
         
         // Lights! Camera! CCActionFollow!
         contentNode.runAction(actionFollow)
+    }
+    
+    func ccPhysicsCollisionPostSolve(pair: CCPhysicsCollisionPair!,  seal: Seal!, wildcard: CCNode!) {
+        let energy = pair.totalKineticEnergy
+        
+        if energy > 5000 {
+            gamePhysicsNode.space.addPostStepBlock({ () -> Void in
+                self.sealRemoved(seal)
+            }, key: seal)
+        }
+    }
+    
+    func sealRemoved(seal: Seal){
+        seal.removeFromParent()
     }
     
     func retry(){
